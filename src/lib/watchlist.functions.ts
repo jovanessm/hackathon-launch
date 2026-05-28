@@ -17,7 +17,7 @@ export const listWatchlist = createServerFn({ method: "GET" })
 export const addWatchlistItem = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({
-    kind: z.enum(["drug", "modality", "company"]),
+    kind: z.enum(["drug", "modality", "company", "opportunity"]),
     value: z.string().min(1).max(140),
     current_phase: z.string().max(40).optional().nullable(),
   }).parse(d))

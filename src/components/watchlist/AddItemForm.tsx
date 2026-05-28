@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { PHASES } from "@/lib/watchlist-helpers";
 
-export type WatchlistKind = "drug" | "modality" | "company";
+export type WatchlistKind = "drug" | "modality" | "company" | "opportunity";
 
 interface Props {
   onAdd: (v: { kind: WatchlistKind; value: string; current_phase: string }) => void;
@@ -27,6 +27,7 @@ export function AddItemForm({ onAdd, isPending }: Props) {
           <option value="drug">Drug</option>
           <option value="modality">Modality</option>
           <option value="company">Company</option>
+          <option value="opportunity">Opportunity</option>
         </select>
       </div>
       <div className="col-span-12 md:col-span-5">

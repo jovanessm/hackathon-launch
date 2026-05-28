@@ -1,3 +1,4 @@
+import { BookmarkPlus } from "lucide-react";
 import { computeFinalScore, sumModifiers } from "@/lib/scoring";
 import { OpportunityModifiers, type ModifierEntry } from "./OpportunityModifiers";
 
@@ -27,9 +28,11 @@ interface Props {
   modifiers: ModifierEntry[];
   isExpanded: boolean;
   onToggleExpand: () => void;
+  onAddToWatchlist?: () => void;
+  isAddingToWatchlist?: boolean;
 }
 
-export function OpportunityCard({ index, opportunity: o, competencyLabel, evidence, modifiers, isExpanded, onToggleExpand }: Props) {
+export function OpportunityCard({ index, opportunity: o, competencyLabel, evidence, modifiers, isExpanded, onToggleExpand, onAddToWatchlist, isAddingToWatchlist }: Props) {
   const totalMod = sumModifiers(modifiers);
   const finalScore = computeFinalScore(o.baseline_score, modifiers);
 
@@ -45,7 +48,19 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
             {o.phase && <span className="label-micro">{o.phase}</span>}
             {o.therapeutic_modality && <span className="label-micro">{o.therapeutic_modality}</span>}
           </div>
-          <h2 className="text-xl font-bold">{o.title}</h2>
+          <div className="flex items-start justify-between">
+            <h2 className="text-xl font-bold">{o.title}</h2>
+            {onAddToWatchlist && (
+              <button 
+                onClick={onAddToWatchlist}
+                disabled={isAddingToWatchlist}
+                className="text-muted-foreground hover:text-primary disabled:opacity-50 transition-colors"
+                title="Add to Watchlist"
+              >
+                <BookmarkPlus className="h-5 w-5" />
+              </button>
+            )}
+          </div>
           <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{o.rationale}</p>
           <div className="mt-4 border-l-2 border-accent pl-4">
             <p className="label-micro text-accent">Why now</p>
