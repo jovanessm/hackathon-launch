@@ -98,9 +98,6 @@ function buildAreaData() {
   });
 }
 
-// Register the route after the component to avoid lexical initialization order problems
-export const Route = createFileRoute("/_authenticated/stat")({ component: StatsPage });
-
 function computeGrowth(product: ProductSeries) {
   const s = product.series;
   if (s.length < 2) return 0;
@@ -112,7 +109,7 @@ function computeGrowth(product: ProductSeries) {
 // Route registration moved to bottom to avoid initialization order issues
 
 function StatCard({ children }: { children: React.ReactNode }) {
-  return <div className="border border-border bg-card p-4 rounded">{children}</div>;
+  return <div className="border border-border bg-card p-3 rounded">{children}</div>;
 }
 
 function StatsPage() {
@@ -189,7 +186,7 @@ function StatsPage() {
   } as const;
 
   return (
-    <div className="grid grid-cols-12 gap-8 p-6 lg:p-8">
+    <div className="grid grid-cols-12 gap-6 p-4 lg:p-6">
       <section className="col-span-12">
         <PageHeader
           eyebrow="Product Metrics"
@@ -219,8 +216,8 @@ function StatsPage() {
           </StatCard>
         </div>
 
-        <div className="border border-border bg-card p-4 rounded">
-          <ChartContainer config={chartConfig} className="h-56 w-full">
+        <div className="border border-border bg-card p-3 rounded">
+          <ChartContainer config={chartConfig} className="h-40 w-full">
             <AreaChart data={areaData}>
               <CartesianGrid vertical={false} strokeDasharray="3 3" />
               <XAxis dataKey="month" tickLine={false} axisLine={false} />
@@ -234,7 +231,7 @@ function StatsPage() {
           </ChartContainer>
         </div>
 
-        <div className="mt-4 grid grid-cols-2 gap-4">
+        <div className="mt-4 grid grid-cols-2 gap-3">
           <StatCard>
             <p className="label-micro">Phase III / Late-stage Transitions</p>
             <div className="mt-2 text-2xl font-semibold">{phaseIIICount}</div>
@@ -258,7 +255,7 @@ function StatsPage() {
           </StatCard>
         </div>
 
-        <div className="mt-4">
+        <div className="mt-3">
           <StatCard>
             <p className="label-micro">Funding (recent rounds)</p>
             <div className="mt-2 text-2xl font-semibold">${(totalFunding / 1_000_000).toFixed(1)}M</div>
@@ -266,7 +263,7 @@ function StatsPage() {
           </StatCard>
         </div>
 
-        <div className="mt-4 border border-border bg-card p-4 rounded">
+        <div className="mt-3 border border-border bg-card p-3 rounded">
           <p className="label-micro">Top Opportunity Picks</p>
           <ul className="mt-3 space-y-3">
             {opportunities.map((o) => (
@@ -285,7 +282,7 @@ function StatsPage() {
       </section>
 
       <aside className="col-span-12 lg:col-span-4">
-        <div className="space-y-4">
+        <div className="space-y-3">
           <StatCard>
             <p className="label-micro">Top Movers (by MoM growth)</p>
             <ol className="mt-3 space-y-3">
@@ -383,3 +380,6 @@ function StatsPage() {
     </div>
   );
 }
+
+// Register the route after the component to avoid lexical initialization order problems
+export const Route = createFileRoute("/_authenticated/stat")({ component: StatsPage });
