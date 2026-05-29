@@ -3,7 +3,7 @@
 
 ---
 
-## 🎯 Team & Challenge
+## Team & Challenge
 
 **Team #16: longSCHOTT**
 - Jason Brian Setiawan
@@ -15,7 +15,7 @@
 
 ---
 
-## 🔍 The Problem
+##  The Problem
 
 Every morning, SCHOTT's market intelligence team faces the same challenge:
 - **The signals that matter are buried** across dozens of databases, registries, and filings
@@ -25,17 +25,17 @@ Every morning, SCHOTT's market intelligence team faces the same challenge:
 
 ---
 
-## ✅ The Solution
+## The Solution
 
 **Opportunity Intelligence Pipeline**
 
 We built an automated data-driven market research platform that empowers SCHOTT's intelligence team to:
 
-- **🔗 Consolidate intelligence** from multiple data sources (clinical trials, patent filings, regulatory approvals, funding signals)
-- **📊 Score opportunities** dynamically based on relevance, market signals, and risk factors
-- **⚡ Detect early signals** before competitors—giving SCHOTT the first-mover advantage
-- **💾 Save and track opportunities** with custom watchlists and document analysis
-- **📈 Surface insights** like opportunity product performance, early signal detection, and competitor's moves
+- ** Consolidate intelligence** from multiple data sources (clinical trials, patent filings, regulatory approvals, funding signals)
+- ** Score opportunities** dynamically based on relevance, market signals, and risk factors
+- ** Detect early signals** before competitors—giving SCHOTT the first-mover advantage
+- ** Save and track opportunities** with custom watchlists and document analysis
+- ** Surface insights** like opportunity product performance, early signal detection, and competitor's moves
 
 ### Core Features
 
