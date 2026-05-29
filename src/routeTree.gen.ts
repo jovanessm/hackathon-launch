@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedWatchlistRouteImport } from './routes/_authenticated/watchlist'
+import { Route as AuthenticatedStatRouteImport } from './routes/_authenticated/stat'
 import { Route as AuthenticatedPotentialCustomersRouteImport } from './routes/_authenticated/potential-customers'
 import { Route as AuthenticatedFiltersRouteImport } from './routes/_authenticated/filters'
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
@@ -42,6 +43,11 @@ const IndexRoute = IndexRouteImport.update({
 const AuthenticatedWatchlistRoute = AuthenticatedWatchlistRouteImport.update({
   id: '/watchlist',
   path: '/watchlist',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedStatRoute = AuthenticatedStatRouteImport.update({
+  id: '/stat',
+  path: '/stat',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
 const AuthenticatedPotentialCustomersRoute =
@@ -80,6 +86,7 @@ export interface FileRoutesByFullPath {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/filters': typeof AuthenticatedFiltersRoute
   '/potential-customers': typeof AuthenticatedPotentialCustomersRoute
+  '/stat': typeof AuthenticatedStatRoute
   '/watchlist': typeof AuthenticatedWatchlistRoute
 }
 export interface FileRoutesByTo {
@@ -91,6 +98,7 @@ export interface FileRoutesByTo {
   '/documents': typeof AuthenticatedDocumentsRoute
   '/filters': typeof AuthenticatedFiltersRoute
   '/potential-customers': typeof AuthenticatedPotentialCustomersRoute
+  '/stat': typeof AuthenticatedStatRoute
   '/watchlist': typeof AuthenticatedWatchlistRoute
 }
 export interface FileRoutesById {
@@ -104,6 +112,7 @@ export interface FileRoutesById {
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/filters': typeof AuthenticatedFiltersRoute
   '/_authenticated/potential-customers': typeof AuthenticatedPotentialCustomersRoute
+  '/_authenticated/stat': typeof AuthenticatedStatRoute
   '/_authenticated/watchlist': typeof AuthenticatedWatchlistRoute
 }
 export interface FileRouteTypes {
@@ -117,6 +126,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/filters'
     | '/potential-customers'
+    | '/stat'
     | '/watchlist'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/documents'
     | '/filters'
     | '/potential-customers'
+    | '/stat'
     | '/watchlist'
   id:
     | '__root__'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/_authenticated/documents'
     | '/_authenticated/filters'
     | '/_authenticated/potential-customers'
+    | '/_authenticated/stat'
     | '/_authenticated/watchlist'
   fileRoutesById: FileRoutesById
 }
@@ -187,6 +199,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWatchlistRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/stat': {
+      id: '/_authenticated/stat'
+      path: '/stat'
+      fullPath: '/stat'
+      preLoaderRoute: typeof AuthenticatedStatRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/potential-customers': {
       id: '/_authenticated/potential-customers'
       path: '/potential-customers'
@@ -231,6 +250,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedFiltersRoute: typeof AuthenticatedFiltersRoute
   AuthenticatedPotentialCustomersRoute: typeof AuthenticatedPotentialCustomersRoute
+  AuthenticatedStatRoute: typeof AuthenticatedStatRoute
   AuthenticatedWatchlistRoute: typeof AuthenticatedWatchlistRoute
 }
 
@@ -240,6 +260,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedFiltersRoute: AuthenticatedFiltersRoute,
   AuthenticatedPotentialCustomersRoute: AuthenticatedPotentialCustomersRoute,
+  AuthenticatedStatRoute: AuthenticatedStatRoute,
   AuthenticatedWatchlistRoute: AuthenticatedWatchlistRoute,
 }
 
