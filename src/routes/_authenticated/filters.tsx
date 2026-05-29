@@ -1,15 +1,22 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { listSavedFilters, deleteSavedFilter } from "@/lib/opportunities.functions";
+import { listSavedFilters, deleteSavedFilter, listDataSources, listCompetencies } from "@/lib/opportunities.functions";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_authenticated/filters")({ component: FiltersPage });
 
 function FiltersPage() {
   const fList = useServerFn(listSavedFilters);
   const fDel = useServerFn(deleteSavedFilter);
+  const fSources = useServerFn(listDataSources);
+  const fComps = useServerFn(listCompetencies);
   const qc = useQueryClient();
-  const { data } = useQuery({ queryKey: ["filters"], queryFn: () => fList() });
+
+  const { data: filters } = useQuery({ queryKey: ["filters"], queryFn: () => fList() });
+  const { data: sources } = useQuery({ queryKey: ["sources"], queryFn: () => fSources() });
+  const { data: comps } = useQuery({ queryKey: ["comps"], queryFn: () => fComps() });
+
   const del = useMutation({
     mutationFn: (id: string) => fDel({ data: { id } }),
     onSuccess: () => qc.invalidateQueries({ queryKey: ["filters"] }),
@@ -23,16 +30,63 @@ function FiltersPage() {
         <p className="mt-2 text-sm text-muted-foreground">Configurations saved from the dashboard search panel.</p>
       </div>
       <ul className="border border-border bg-card divide-y divide-border">
-        {(data ?? []).map((f) => (
-          <li key={f.id} className="p-5 flex justify-between items-start">
-            <div>
-              <p className="text-sm font-semibold">{f.name}</p>
-              <pre className="mt-2 text-xs text-muted-foreground bg-secondary p-3 max-w-xl overflow-x-auto">{JSON.stringify(f.payload, null, 2)}</pre>
-            </div>
-            <button onClick={() => del.mutate(f.id)} className="text-xs text-destructive hover:underline">Delete</button>
-          </li>
-        ))}
-        {(data ?? []).length === 0 && (
+        {(filters ?? []).map((f) => {
+          const payload = f.payload as { search?: string; competency?: string; enabled?: Record<string, boolean> };
+          
+          const searchVal = payload.search;
+          const compVal = payload.competency;
+          const compLabel = comps?.find(c => c.id === compVal)?.label || compVal;
+          
+          const disabledSources = Object.entries(payload.enabled || {})
+            .filter(([_, isEnabled]) => !isEnabled)
+            .map(([key]) => sources?.find(s => s.key === key)?.label || key);
+
+          return (
+            <li key={f.id} className="p-6 flex flex-col sm:flex-row sm:justify-between sm:items-start gap-4">
+              <div>
+                <p className="text-lg font-bold text-primary">{f.name}</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {searchVal && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-secondary text-secondary-foreground rounded">
+                      <span className="opacity-70">Keywords:</span> {searchVal}
+                    </span>
+                  )}
+                  {compVal && compVal !== "all" && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-accent/10 text-accent rounded">
+                      <span className="opacity-70">Competency:</span> {compLabel}
+                    </span>
+                  )}
+                  {disabledSources.length > 0 && (
+                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium bg-destructive/10 text-destructive rounded">
+                      <span className="opacity-70">Excluded sources:</span> {disabledSources.join(", ")}
+                    </span>
+                  )}
+                  {!searchVal && (!compVal || compVal === "all") && disabledSources.length === 0 && (
+                    <span className="text-xs text-muted-foreground italic">No specific filters applied</span>
+                  )}
+                </div>
+              </div>
+              <div className="flex items-center gap-3 shrink-0">
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => del.mutate(f.id)} 
+                  className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                >
+                  Delete
+                </Button>
+                <Link 
+                  to="/dashboard" 
+                  search={payload as any} 
+                  className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                >
+                  Use Filter
+                </Link>
+              </div>
+            </li>
+          );
+        })}
+        {(filters ?? []).length === 0 && (
           <li className="p-12 text-center text-sm text-muted-foreground">No saved filters yet. Save one from the dashboard.</li>
         )}
       </ul>

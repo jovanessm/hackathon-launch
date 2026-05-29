@@ -13,10 +13,10 @@ export function useOpportunityFilters<
   T extends FilterableOpportunity,
   E extends { opportunity_id: string; data_sources?: { key: string; label: string } | null },
   L extends { opportunity_id: string; modifier_value: number | string }
->(opps: T[], evidence: E[] = [], logs: L[] = []) {
-  const [search, setSearch] = useState("");
-  const [enabled, setEnabled] = useState<Record<string, boolean>>({});
-  const [competency, setCompetency] = useState<string>("all");
+>(opps: T[], evidence: E[] = [], logs: L[] = [], initialState?: { search?: string, competency?: string, enabled?: Record<string, boolean> }) {
+  const [search, setSearch] = useState(initialState?.search ?? "");
+  const [enabled, setEnabled] = useState<Record<string, boolean>>(initialState?.enabled ?? {});
+  const [competency, setCompetency] = useState<string>(initialState?.competency ?? "all");
 
   const toggleSource = (key: string) => setEnabled((p) => ({ ...p, [key]: !(p[key] ?? true) }));
   const isOn = (key: string) => enabled[key] ?? true;

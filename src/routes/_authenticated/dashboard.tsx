@@ -7,13 +7,25 @@ import { FiltersSidebar } from "@/components/dashboard/FiltersSidebar";
 import { OpportunityList } from "@/components/dashboard/OpportunityList";
 import { PageHeader } from "@/components/ui/PageHeader";
 
-export const Route = createFileRoute("/_authenticated/dashboard")({ component: Dashboard });
+import { z } from "zod";
+
+const dashboardSearchSchema = z.object({
+  search: z.string().optional(),
+  competency: z.string().optional(),
+  enabled: z.record(z.string(), z.boolean()).optional()
+});
+
+export const Route = createFileRoute("/_authenticated/dashboard")({ 
+  component: Dashboard,
+  validateSearch: dashboardSearchSchema,
+});
 
 function Dashboard() {
   const fetchOpps = useServerFn(getOpportunities);
   const fetchSources = useServerFn(listDataSources);
   const fetchSave = useServerFn(saveFilter);
   const qc = useQueryClient();
+  const searchParams = Route.useSearch();
 
   const { data: oppData, isLoading } = useQuery({ queryKey: ["opps"], queryFn: () => fetchOpps() });
   const { data: sources } = useQuery({ queryKey: ["sources"], queryFn: () => fetchSources() });
@@ -23,7 +35,7 @@ function Dashboard() {
   const comps = oppData?.comps ?? [];
   const logs = oppData?.logs ?? [];
 
-  const filters = useOpportunityFilters(opps, evidence, logs);
+  const filters = useOpportunityFilters(opps, evidence, logs, searchParams);
 
   const saveMut = useMutation({
     mutationFn: (name: string) => fetchSave({ data: { name, payload: filters.payload } }),

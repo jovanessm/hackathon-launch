@@ -22,6 +22,13 @@ export const listDataSources = createServerFn({ method: "GET" })
     return data ?? [];
   });
 
+export const listCompetencies = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data } = await context.supabase.from("competencies").select("*");
+    return data ?? [];
+  });
+
 export const saveFilter = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({
