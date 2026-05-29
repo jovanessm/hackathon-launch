@@ -7,7 +7,7 @@ export const getOpportunities = createServerFn({ method: "GET" })
   .handler(async ({ context }) => {
     const { supabase, userId } = context;
     const [{ data: opps }, { data: evidence }, { data: comps }, { data: logs }] = await Promise.all([
-      supabase.from("opportunities").select("*").order("baseline_score", { ascending: false }).limit(5),
+      supabase.from("opportunities").select("*").order("baseline_score", { ascending: false }).limit(10),
       supabase.from("opportunity_evidence").select("*, data_sources(key,label)"),
       supabase.from("competencies").select("*"),
       supabase.from("evaluation_log").select("*, documents(filename)").eq("user_id", userId),

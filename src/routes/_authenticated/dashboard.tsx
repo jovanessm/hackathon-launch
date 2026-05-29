@@ -47,8 +47,8 @@ function Dashboard() {
       <section className="col-span-12 lg:col-span-9">
         <PageHeader
           eyebrow="Strategic Intelligence"
-          title="Top 5 Ranked Opportunities"
-          description="Concrete bets for SCHOTT's pharmaceutical glass unit, scored from public signals across clinical, regulatory, and patent sources."
+            title="Top Ranked Opportunities"
+            description="Concrete bets for SCHOTT's pharmaceutical glass unit, scored from public signals across clinical, regulatory, and patent sources."
         />
         <OpportunityList
           opportunities={filters.filtered}
