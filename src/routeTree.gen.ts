@@ -14,6 +14,7 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedWatchlistRouteImport } from './routes/_authenticated/watchlist'
+import { Route as AuthenticatedPotentialCustomersRouteImport } from './routes/_authenticated/potential-customers'
 import { Route as AuthenticatedFiltersRouteImport } from './routes/_authenticated/filters'
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
@@ -43,6 +44,12 @@ const AuthenticatedWatchlistRoute = AuthenticatedWatchlistRouteImport.update({
   path: '/watchlist',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedPotentialCustomersRoute =
+  AuthenticatedPotentialCustomersRouteImport.update({
+    id: '/potential-customers',
+    path: '/potential-customers',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedFiltersRoute = AuthenticatedFiltersRouteImport.update({
   id: '/filters',
   path: '/filters',
@@ -72,6 +79,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
   '/filters': typeof AuthenticatedFiltersRoute
+  '/potential-customers': typeof AuthenticatedPotentialCustomersRoute
   '/watchlist': typeof AuthenticatedWatchlistRoute
 }
 export interface FileRoutesByTo {
@@ -82,6 +90,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
   '/filters': typeof AuthenticatedFiltersRoute
+  '/potential-customers': typeof AuthenticatedPotentialCustomersRoute
   '/watchlist': typeof AuthenticatedWatchlistRoute
 }
 export interface FileRoutesById {
@@ -94,6 +103,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/filters': typeof AuthenticatedFiltersRoute
+  '/_authenticated/potential-customers': typeof AuthenticatedPotentialCustomersRoute
   '/_authenticated/watchlist': typeof AuthenticatedWatchlistRoute
 }
 export interface FileRouteTypes {
@@ -106,6 +116,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/documents'
     | '/filters'
+    | '/potential-customers'
     | '/watchlist'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -116,6 +127,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/documents'
     | '/filters'
+    | '/potential-customers'
     | '/watchlist'
   id:
     | '__root__'
@@ -127,6 +139,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/documents'
     | '/_authenticated/filters'
+    | '/_authenticated/potential-customers'
     | '/_authenticated/watchlist'
   fileRoutesById: FileRoutesById
 }
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedWatchlistRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/potential-customers': {
+      id: '/_authenticated/potential-customers'
+      path: '/potential-customers'
+      fullPath: '/potential-customers'
+      preLoaderRoute: typeof AuthenticatedPotentialCustomersRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/filters': {
       id: '/_authenticated/filters'
       path: '/filters'
@@ -210,6 +230,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedFiltersRoute: typeof AuthenticatedFiltersRoute
+  AuthenticatedPotentialCustomersRoute: typeof AuthenticatedPotentialCustomersRoute
   AuthenticatedWatchlistRoute: typeof AuthenticatedWatchlistRoute
 }
 
@@ -218,6 +239,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedFiltersRoute: AuthenticatedFiltersRoute,
+  AuthenticatedPotentialCustomersRoute: AuthenticatedPotentialCustomersRoute,
   AuthenticatedWatchlistRoute: AuthenticatedWatchlistRoute,
 }
 
