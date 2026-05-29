@@ -1,7 +1,7 @@
+import { deleteSavedFilter, listSavedFilters } from "@/lib/opportunities.functions";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { listSavedFilters, deleteSavedFilter } from "@/lib/opportunities.functions";
 
 export const Route = createFileRoute("/_authenticated/filters")({ component: FiltersPage });
 
@@ -15,6 +15,40 @@ function FiltersPage() {
     onSuccess: () => qc.invalidateQueries({ queryKey: ["filters"] }),
   });
 
+  function formatPayload(payload: any): string {
+    if (!payload) return "";
+
+    const competencyRaw = payload.competency || "all";
+    const competency = competencyRaw.charAt(0).toUpperCase() + competencyRaw.slice(1);
+
+    const allSources = ["ctis", "espacenet", "clinicaltrials", "ema", "openfda", "google_patents"];
+
+    const activeSources = allSources.filter((source) => {
+      if (payload.enabled && payload.enabled[source] === false) {
+        return false;
+      }
+      return true;
+    });
+
+    const dataSourcesList = activeSources.map((source) => {
+      switch (source) {
+        case "ctis": return "CTIS";
+        case "ema": return "EMA";
+        case "openfda": return "OpenFDA";
+        case "clinicaltrials": return "ClinicalTrials";
+        case "espacenet": return "Espacenet";
+        case "google_patents": return "Google Patents";
+        default: return source;
+      }
+    });
+
+    const dataSources = dataSourcesList.length > 0
+      ? dataSourcesList.join(", ")
+      : "None";
+
+    return `Competency: ${competency} | Data Sources: ${dataSources}`;
+  }
+
   return (
     <div>
       <div className="mb-8">
@@ -27,7 +61,9 @@ function FiltersPage() {
           <li key={f.id} className="p-5 flex justify-between items-start">
             <div>
               <p className="text-sm font-semibold">{f.name}</p>
-              <pre className="mt-2 text-xs text-muted-foreground bg-secondary p-3 max-w-xl overflow-x-auto">{JSON.stringify(f.payload, null, 2)}</pre>
+              <p className="mt-1 text-xs text-muted-foreground font-medium">
+                {formatPayload(f.payload)}
+              </p>
             </div>
             <button onClick={() => del.mutate(f.id)} className="text-xs text-destructive hover:underline">Delete</button>
           </li>
