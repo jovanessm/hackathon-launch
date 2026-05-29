@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listWatchlist, addWatchlistItem, updateWatchlistPhase, deleteWatchlistItem } from "@/lib/watchlist.functions";
+import { getOpportunities } from "@/lib/opportunities.functions";
 import { PageHeader } from "@/components/ui/PageHeader";
 import { ExportButtons } from "@/components/ui/ExportButtons";
 import { AddItemForm } from "@/components/watchlist/AddItemForm";
@@ -14,9 +15,11 @@ function WatchlistPage() {
   const fAdd = useServerFn(addWatchlistItem);
   const fPhase = useServerFn(updateWatchlistPhase);
   const fDel = useServerFn(deleteWatchlistItem);
+  const fOpps = useServerFn(getOpportunities);
   const qc = useQueryClient();
 
   const { data } = useQuery({ queryKey: ["watchlist"], queryFn: () => fList() });
+  const { data: oppData } = useQuery({ queryKey: ["opps"], queryFn: () => fOpps() });
   const invalidate = () => qc.invalidateQueries({ queryKey: ["watchlist"] });
 
   const addMut = useMutation({
@@ -54,6 +57,8 @@ function WatchlistPage() {
       <WatchlistTable
         items={data?.items ?? []}
         events={data?.events ?? []}
+        opportunities={oppData?.opps ?? []}
+        competencies={oppData?.comps ?? []}
         onPhaseChange={(id, to_phase) => phaseMut.mutate({ id, to_phase })}
         onRemove={(id) => delMut.mutate(id)}
       />

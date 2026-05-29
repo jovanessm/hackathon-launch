@@ -6,7 +6,7 @@ import { useAuth } from "@/lib/auth-context";
 const NAV = [
   { to: "/dashboard", label: "Dashboard" },
   { to: "/watchlist", label: "Watchlist" },
-  { to: "/alerts", label: "Viral Alerts" },
+  { to: "/alerts", label: "Signals" },
   { to: "/documents", label: "Documents" },
   { to: "/stat", label: "Stats" },
   { to: "/filters", label: "Saved Filters" },

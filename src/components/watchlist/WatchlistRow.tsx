@@ -1,4 +1,7 @@
+import { useState } from "react";
 import { PHASES, isRecentPhaseChange } from "@/lib/watchlist-helpers";
+import { OpportunityDetailsOverlay } from "@/components/dashboard/OpportunityDetailsOverlay";
+import type { Opportunity } from "@/components/dashboard/OpportunityCard";
 
 export interface WatchlistItem {
   id: string;
@@ -21,15 +24,37 @@ interface Props {
   events: PhaseEvent[];
   onPhaseChange: (to_phase: string) => void;
   onRemove: () => void;
+  opportunity?: Opportunity;
+  competencyLabel?: string;
 }
 
-export function WatchlistRow({ item, events, onPhaseChange, onRemove }: Props) {
+export function WatchlistRow({ item, events, onPhaseChange, onRemove, opportunity, competencyLabel }: Props) {
   const recent = isRecentPhaseChange(item.last_phase_change_at);
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
 
   return (
     <tr className="border-t border-border align-top">
       <td className="p-4 text-xs uppercase tracking-wider">{item.kind}</td>
-      <td className="p-4 text-sm font-semibold">{item.value}</td>
+      <td className="p-4 text-sm font-semibold">
+        {item.kind === "opportunity" && opportunity ? (
+          <>
+            <button 
+              onClick={() => setIsOverlayOpen(true)}
+              className="text-primary hover:underline text-left"
+            >
+              {item.value}
+            </button>
+            <OpportunityDetailsOverlay
+              opportunity={opportunity}
+              competencyLabel={competencyLabel}
+              isOpen={isOverlayOpen}
+              onOpenChange={setIsOverlayOpen}
+            />
+          </>
+        ) : (
+          item.value
+        )}
+      </td>
       <td className="p-4 text-sm">
         {item.current_phase ?? "—"}
         {recent && <span className="ml-2 label-micro bg-accent text-accent-foreground px-2 py-0.5">Phase changed</span>}

@@ -39,14 +39,48 @@ interface Props {
   isFavorited?: boolean;
 }
 
+function calculateTimingWindow(phase: string | null, riskLevel?: "low" | "medium" | "high"): string {
+  if (!phase) return "12 - 18 Months";
+  
+  const lowerPhase = phase.toLowerCase();
+  let baseMin = 12;
+  let baseMax = 18;
+
+  if (lowerPhase.includes("iii") || lowerPhase.includes("3") || lowerPhase.includes("registration")) {
+    baseMin = 6;
+    baseMax = 12;
+  } else if (lowerPhase.includes("ii") || lowerPhase.includes("2")) {
+    baseMin = 12;
+    baseMax = 24;
+  } else if (lowerPhase.includes("i") || lowerPhase.includes("1") || lowerPhase.includes("pre")) {
+    baseMin = 24;
+    baseMax = 36;
+  } else if (lowerPhase.includes("approved") || lowerPhase.includes("commercial")) {
+    return "Immediate Action";
+  }
+
+  if (riskLevel === "high") {
+    baseMin += 6;
+    baseMax += 6;
+  } else if (riskLevel === "low") {
+    baseMin = Math.max(0, baseMin - 3);
+    baseMax = Math.max(0, baseMax - 3);
+  }
+
+  if (baseMin === 0) {
+    return `< ${baseMax} Months`;
+  }
+  return `${baseMin} - ${baseMax} Months`;
+}
+
 export function OpportunityCard({ index, opportunity: o, competencyLabel, evidence, modifiers, isExpanded, onToggleExpand, onAddToWatchlist, isAddingToWatchlist, onRemoveFromWatchlist, isRemovingFromWatchlist, isFavorited }: Props) {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const totalMod = sumModifiers(modifiers);
   const finalScore = computeFinalScore(o.baseline_score, modifiers);
 
   return (
-    <li className="border border-border bg-card">
-      <div className="p-6 grid grid-cols-12 gap-6">
+    <li className="border border-border bg-card group relative">
+      <div className="p-6 grid grid-cols-12 gap-6 pb-8">
         <div className="col-span-1">
           <p className="text-5xl font-bold text-primary leading-none">{String(index + 1).padStart(2, "0")}</p>
         </div>
@@ -110,18 +144,24 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
                 </div>
               </div>
             )}
-          </div>
-
-          <div className="mt-8 flex justify-end gap-2 items-center">
-            <div className="inline-flex gap-2 rounded-sm border border-border bg-background p-1">
-              <Button type="button" variant="ghost" size="icon" title="Thumbs up" aria-label="Thumbs up">
-                <ThumbsUp className="h-4 w-4" />
-              </Button>
-              <Button type="button" variant="ghost" size="icon" title="Thumbs down" aria-label="Thumbs down">
-                <ThumbsDown className="h-4 w-4" />
-              </Button>
+            <div className="mt-4 pt-4 border-t border-border">
+              <p className="label-micro text-muted-foreground">Timing Window</p>
+              <div className="mt-2 inline-block px-3 py-1 rounded text-sm font-semibold bg-[color:var(--color-secondary)] text-[color:var(--color-secondary-foreground)] border border-border">
+                {calculateTimingWindow(o.phase, o.risk_level)}
+              </div>
             </div>
           </div>
+        </div>
+      </div>
+      
+      <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity z-10">
+        <div className="inline-flex gap-2 rounded-sm border border-border bg-background p-1 shadow-sm">
+          <Button type="button" variant="ghost" size="icon" title="Thumbs up" aria-label="Thumbs up">
+            <ThumbsUp className="h-4 w-4" />
+          </Button>
+          <Button type="button" variant="ghost" size="icon" title="Thumbs down" aria-label="Thumbs down">
+            <ThumbsDown className="h-4 w-4" />
+          </Button>
         </div>
       </div>
       {isExpanded && modifiers.length > 0 && <OpportunityModifiers modifiers={modifiers} />}
