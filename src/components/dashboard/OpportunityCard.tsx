@@ -1,4 +1,4 @@
-import { BookmarkPlus, ThumbsDown, ThumbsUp } from "lucide-react";
+import { BookmarkPlus, BookmarkCheck, ThumbsDown, ThumbsUp } from "lucide-react";
 import { computeFinalScore, sumModifiers } from "@/lib/scoring";
 import { Button } from "@/components/ui/button";
 import { OpportunityModifiers, type ModifierEntry } from "./OpportunityModifiers";
@@ -31,9 +31,12 @@ interface Props {
   onToggleExpand: () => void;
   onAddToWatchlist?: () => void;
   isAddingToWatchlist?: boolean;
+  onRemoveFromWatchlist?: () => void;
+  isRemovingFromWatchlist?: boolean;
+  isFavorited?: boolean;
 }
 
-export function OpportunityCard({ index, opportunity: o, competencyLabel, evidence, modifiers, isExpanded, onToggleExpand, onAddToWatchlist, isAddingToWatchlist }: Props) {
+export function OpportunityCard({ index, opportunity: o, competencyLabel, evidence, modifiers, isExpanded, onToggleExpand, onAddToWatchlist, isAddingToWatchlist, onRemoveFromWatchlist, isRemovingFromWatchlist, isFavorited }: Props) {
   const totalMod = sumModifiers(modifiers);
   const finalScore = computeFinalScore(o.baseline_score, modifiers);
 
@@ -51,14 +54,14 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
           </div>
           <div className="flex items-start justify-between">
             <h2 className="text-xl font-bold">{o.title}</h2>
-            {onAddToWatchlist && (
+            {(onAddToWatchlist || onRemoveFromWatchlist) && (
               <button 
-                onClick={onAddToWatchlist}
-                disabled={isAddingToWatchlist}
-                className="text-muted-foreground hover:text-primary disabled:opacity-50 transition-colors"
-                title="Add to Watchlist"
+                onClick={isFavorited ? onRemoveFromWatchlist : onAddToWatchlist}
+                disabled={(isFavorited ? isRemovingFromWatchlist : isAddingToWatchlist)}
+                className={`transition-colors ${isFavorited ? 'text-primary hover:text-destructive' : 'text-muted-foreground hover:text-primary'} disabled:opacity-50`}
+                title={isFavorited ? "Remove from Watchlist" : "Add to Watchlist"}
               >
-                <BookmarkPlus className="h-5 w-5" />
+                {isFavorited ? <BookmarkCheck className="h-5 w-5" /> : <BookmarkPlus className="h-5 w-5" />}
               </button>
             )}
           </div>
