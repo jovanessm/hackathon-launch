@@ -98,7 +98,7 @@ export function OpportunityDetailsOverlay({ opportunity, competencyLabel, isOpen
 
             <section>
               <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Generated Potential Customers</h3>
+                <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Potential Interest</h3>
                 <span className="text-xs bg-accent/10 text-accent px-2 py-1 rounded font-medium">AI Mapped</span>
               </div>
               
