@@ -24,9 +24,12 @@ function LoginPage() {
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
       <div className="hidden lg:flex flex-col justify-between bg-primary text-primary-foreground p-12">
-        <div>
-          <p className="label-micro text-primary-foreground/60">SCHOTT AG</p>
-          <p className="mt-2 text-2xl font-bold tracking-tight">Smart Opportunity Finder</p>
+        <div className="flex flex-col whitespace-nowrap justify-center">
+          <div className="flex items-baseline">
+            <span className="text-xl font-semibold tracking-wide text-primary-foreground/80">LONG</span>
+            <span className="text-4xl font-black tracking-tight">SCHOTT</span>
+          </div>
+          <span className="text-xs uppercase tracking-[0.15em] text-primary-foreground/60 mt-1 font-medium">Smart Opportunity Finder</span>
         </div>
         <div>
           <h1 className="text-5xl font-bold leading-tight">
@@ -37,7 +40,7 @@ function LoginPage() {
             become obvious to the broader market.
           </p>
         </div>
-        <p className="label-micro text-primary-foreground/50">Pharmaceutical glass intelligence platform</p>
+        <p className="label-micro text-primary-foreground/50">intelligence platform</p>
       </div>
       <div className="flex items-center justify-center p-8 bg-background">
         <div className="w-full max-w-sm">
