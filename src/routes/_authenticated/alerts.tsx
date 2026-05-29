@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listAlerts, markAlert } from "@/lib/alerts.functions";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { ExportButtons } from "@/components/ui/ExportButtons";
 import { AlertCard } from "@/components/alerts/AlertCard";
 
 export const Route = createFileRoute("/_authenticated/alerts")({ component: AlertsPage });
@@ -26,7 +27,18 @@ function AlertsPage() {
         eyebrow="Early Signal Detection"
         title="Viral Alerts"
         description="Anomalous spikes in patent filings, early-stage funding, and regulatory updates — weak signals before they become consensus."
-      />
+      >
+        <ExportButtons
+          data={alerts}
+          filename="viral-alerts"
+          columns={[
+            { header: "Title", accessor: (a) => a.title },
+            { header: "Message", accessor: (a) => a.message },
+            { header: "Severity", accessor: (a) => a.severity },
+            { header: "Date", accessor: (a) => new Date(a.created_at).toLocaleDateString() }
+          ]}
+        />
+      </PageHeader>
       <div className="space-y-3">
         {alerts.map((a) => (
           <AlertCard

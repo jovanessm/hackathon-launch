@@ -4,6 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listDocuments, deleteDocument } from "@/lib/documents.functions";
 import { useDocumentUpload } from "@/hooks/useDocumentUpload";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { ExportButtons } from "@/components/ui/ExportButtons";
 import { UploadPanel } from "@/components/documents/UploadPanel";
 import { DocumentList } from "@/components/documents/DocumentList";
 import { EvaluationLogList } from "@/components/documents/EvaluationLogList";
@@ -32,7 +33,18 @@ function DocumentsPage() {
         eyebrow="Bidirectional Re-evaluation"
         title="Document Injection"
         description="Upload internal R&D notes or sales memos. The parser extracts text and applies a bounded modifier (−50% to +50%) against each baseline opportunity score. Documents cannot create opportunities from zero — they are context only."
-      />
+      >
+        <ExportButtons
+          data={data?.logs ?? []}
+          filename="document-evaluations"
+          columns={[
+            { header: "Opportunity ID", accessor: (l) => l.opportunity_id },
+            { header: "Modifier Value", accessor: (l) => l.modifier_value },
+            { header: "Extracted Snippet", accessor: (l) => l.snippet },
+            { header: "Source Document", accessor: (l) => (l.documents as any)?.filename }
+          ]}
+        />
+      </PageHeader>
       <UploadPanel
         file={file}
         onFileChange={setFile}

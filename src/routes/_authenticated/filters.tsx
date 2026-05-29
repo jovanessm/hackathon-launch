@@ -3,6 +3,8 @@ import { deleteSavedFilter, listCompetencies, listDataSources, listSavedFilters 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
+import { PageHeader } from "@/components/ui/PageHeader";
+import { ExportButtons } from "@/components/ui/ExportButtons";
 
 export const Route = createFileRoute("/_authenticated/filters")({ component: FiltersPage });
 
@@ -58,11 +60,21 @@ function FiltersPage() {
 
   return (
     <div>
-      <div className="mb-8">
-        <p className="label-micro">Saved Filters</p>
-        <h1 className="mt-1 text-4xl font-bold">My Filters</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Configurations saved from the dashboard search panel.</p>
-      </div>
+      <PageHeader
+        eyebrow="Saved Filters"
+        title="My Filters"
+        description="Configurations saved from the dashboard search panel."
+      >
+        <ExportButtons
+          data={filters ?? []}
+          filename="saved-filters"
+          columns={[
+            { header: "Filter Name", accessor: (f) => f.name },
+            { header: "Search Keywords", accessor: (f) => (f.payload as any).search || "" },
+            { header: "Competency ID", accessor: (f) => (f.payload as any).competency || "all" }
+          ]}
+        />
+      </PageHeader>
       <ul className="border border-border bg-card divide-y divide-border">
         {(filters ?? []).map((f) => {
           const payload = f.payload as { search?: string; competency?: string; enabled?: Record<string, boolean> };

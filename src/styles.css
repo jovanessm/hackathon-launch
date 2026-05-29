@@ -103,3 +103,15 @@
   font-weight: 600;
   color: var(--color-muted-foreground);
 }
+
+@media print {
+  @page { margin: 0.5cm; }
+  body {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    background-color: white !important;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+}

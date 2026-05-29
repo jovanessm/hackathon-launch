@@ -1,5 +1,6 @@
 import React from "react";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { ExportButtons } from "@/components/ui/ExportButtons";
 import { createFileRoute } from "@tanstack/react-router";
 
 type Company = {
@@ -119,7 +120,21 @@ function PotentialCustomersPage() {
         eyebrow="Potential Customers"
         title="Potential Customers"
         description="List of mock potential customers and why our products might interest them."
-      />
+      >
+        <ExportButtons
+          data={mockCompanies}
+          filename="potential-customers"
+          columns={[
+            { header: "Company Name", accessor: (c) => c.name },
+            { header: "Description", accessor: (c) => c.description },
+            { header: "Email", accessor: (c) => c.contact.email },
+            { header: "Phone", accessor: (c) => c.contact.phone },
+            { header: "Products", accessor: (c) => c.productsInterested.join(", ") },
+            { header: "Competencies", accessor: (c) => c.competencies.join(", ") },
+            { header: "AI Summary", accessor: (c) => c.aiSummary }
+          ]}
+        />
+      </PageHeader>
 
       <div className="grid gap-4">
         {mockCompanies.map((c) => (

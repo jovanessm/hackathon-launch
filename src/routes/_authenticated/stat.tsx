@@ -3,6 +3,7 @@
 import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { ExportButtons } from "@/components/ui/ExportButtons";
 import {
   ChartContainer,
   ChartTooltip,
@@ -192,7 +193,18 @@ function StatsPage() {
           eyebrow="Product Metrics"
           title="Opportunity Product performance overview"
           description="Revenue time-series and top-moving products. Items are mapped to SCHOTT competencies (see DOMAIN.md)."
-        />
+        >
+          <ExportButtons
+            data={productStats}
+            filename="product-stats"
+            columns={[
+              { header: "Product", accessor: (p) => p.name },
+              { header: "Competency", accessor: (p) => p.competency },
+              { header: "Latest Revenue", accessor: (p) => p.latest },
+              { header: "Growth (%)", accessor: (p) => p.growth.toFixed(1) }
+            ]}
+          />
+        </PageHeader>
       </section>
 
       <section className="col-span-12 lg:col-span-8">

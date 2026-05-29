@@ -25,7 +25,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-background">
-      <header className="border-b border-border bg-primary text-primary-foreground">
+      <header className="border-b border-border bg-primary text-primary-foreground print:hidden">
         <div className="max-w-[1400px] mx-auto px-8 h-16 flex items-center justify-between">
           <Link to="/dashboard" className="flex items-baseline gap-3">
             <span className="text-xl font-bold tracking-tight">SCHOTT</span>
@@ -59,7 +59,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
       </header>
       <main className="flex-1 max-w-[1400px] w-full mx-auto px-8 py-10">{children}</main>
-      <footer className="border-t border-border py-6 mt-12">
+      <footer className="border-t border-border py-6 mt-12 print:hidden">
         <div className="max-w-[1400px] mx-auto px-8 flex justify-between text-xs text-muted-foreground">
           <span>SCHOTT AG — Pharmaceutical Glass Intelligence</span>
           <span className="label-micro">Pioneer the impossible</span>

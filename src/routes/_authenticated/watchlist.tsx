@@ -3,6 +3,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { listWatchlist, addWatchlistItem, updateWatchlistPhase, deleteWatchlistItem } from "@/lib/watchlist.functions";
 import { PageHeader } from "@/components/ui/PageHeader";
+import { ExportButtons } from "@/components/ui/ExportButtons";
 import { AddItemForm } from "@/components/watchlist/AddItemForm";
 import { WatchlistTable } from "@/components/watchlist/WatchlistTable";
 
@@ -37,7 +38,18 @@ function WatchlistPage() {
         eyebrow="Monitoring"
         title="Watchlist"
         description="Track pipelines, modalities, and companies. The system records phase transitions to gauge when primary packaging demand matures."
-      />
+      >
+        <ExportButtons
+          data={data?.items ?? []}
+          filename="watchlist"
+          columns={[
+            { header: "Type", accessor: (i) => i.kind },
+            { header: "Name", accessor: (i) => i.value },
+            { header: "Current Phase", accessor: (i) => i.current_phase },
+            { header: "Last Phase Change", accessor: (i) => i.last_phase_change_at ? new Date(i.last_phase_change_at).toLocaleDateString() : "-" }
+          ]}
+        />
+      </PageHeader>
       <AddItemForm onAdd={(v) => addMut.mutate(v)} isPending={addMut.isPending} />
       <WatchlistTable
         items={data?.items ?? []}
