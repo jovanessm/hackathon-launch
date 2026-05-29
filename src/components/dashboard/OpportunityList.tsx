@@ -14,10 +14,12 @@ interface Props {
   evidence: (OpportunityEvidence)[];
   logs: LogEntry[];
   competencies: Competency[];
+  generatedModifiers?: Record<string, { modifier_value: number; snippet: string }[]>;
+  isOn: (key: string) => boolean;
   isLoading: boolean;
 }
 
-export function OpportunityList({ opportunities, evidence, logs, competencies, isLoading }: Props) {
+export function OpportunityList({ opportunities, evidence, logs, competencies, generatedModifiers, isOn, isLoading }: Props) {
   const [expanded, setExpanded] = useState<string | null>(null);
   
   const fAdd = useServerFn(addWatchlistItem);
@@ -54,8 +56,8 @@ export function OpportunityList({ opportunities, evidence, logs, competencies, i
           index={i}
           opportunity={o}
           competencyLabel={competencies.find((c) => c.id === o.competency_id)?.label}
-          evidence={evidence.filter((e) => e.opportunity_id === o.id)}
-          modifiers={logs.filter((l) => l.opportunity_id === o.id)}
+          evidence={evidence.filter((e) => e.opportunity_id === o.id && (e.data_sources?.key ? isOn(e.data_sources.key) : true))}
+          modifiers={[...logs.filter((l) => l.opportunity_id === o.id), ...(generatedModifiers?.[o.id] || [])]}
           isExpanded={expanded === o.id}
           onToggleExpand={() => setExpanded(expanded === o.id ? null : o.id)}
           onAddToWatchlist={() => addMut.mutate({ kind: "opportunity", value: o.title, current_phase: o.phase ?? "Phase II" })}

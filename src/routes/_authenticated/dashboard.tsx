@@ -23,7 +23,7 @@ function Dashboard() {
   const comps = oppData?.comps ?? [];
   const logs = oppData?.logs ?? [];
 
-  const filters = useOpportunityFilters(opps);
+  const filters = useOpportunityFilters(opps, evidence, logs);
 
   const saveMut = useMutation({
     mutationFn: (name: string) => fetchSave({ data: { name, payload: filters.payload } }),
@@ -55,6 +55,8 @@ function Dashboard() {
           evidence={evidence}
           logs={logs}
           competencies={comps}
+          generatedModifiers={filters.generatedModifiers}
+          isOn={filters.isOn}
           isLoading={isLoading}
         />
       </section>
