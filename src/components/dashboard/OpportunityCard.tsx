@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { computeFinalScore, sumModifiers } from "@/lib/scoring";
-import { BookmarkCheck, BookmarkPlus, ThumbsDown, ThumbsUp } from "lucide-react";
+import { BookmarkCheck, BookmarkPlus, ThumbsDown, ThumbsUp, Eye } from "lucide-react";
 import { OpportunityModifiers, type ModifierEntry } from "./OpportunityModifiers";
+import { OpportunityDetailsOverlay } from "./OpportunityDetailsOverlay";
 
 export interface OpportunityEvidence {
   id: string;
@@ -38,6 +40,7 @@ interface Props {
 }
 
 export function OpportunityCard({ index, opportunity: o, competencyLabel, evidence, modifiers, isExpanded, onToggleExpand, onAddToWatchlist, isAddingToWatchlist, onRemoveFromWatchlist, isRemovingFromWatchlist, isFavorited }: Props) {
+  const [isOverlayOpen, setIsOverlayOpen] = useState(false);
   const totalMod = sumModifiers(modifiers);
   const finalScore = computeFinalScore(o.baseline_score, modifiers);
 
@@ -54,7 +57,12 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
             {o.therapeutic_modality && <span className="label-micro">{o.therapeutic_modality}</span>}
           </div>
           <div className="flex items-start justify-between">
-            <h2 className="text-xl font-bold">{o.title}</h2>
+            <div className="flex items-center gap-2">
+              <h2 className="text-xl font-bold">{o.title}</h2>
+              <Button variant="outline" size="icon" onClick={() => setIsOverlayOpen(true)} className="h-8 w-8 text-muted-foreground hover:text-primary" title="View Details">
+                <Eye className="h-4 w-4" />
+              </Button>
+            </div>
             {(onAddToWatchlist || onRemoveFromWatchlist) && (
               <button
                 onClick={isFavorited ? onRemoveFromWatchlist : onAddToWatchlist}
@@ -104,7 +112,7 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
             )}
           </div>
 
-          <div className="mt-8 flex justify-end">
+          <div className="mt-8 flex justify-end gap-2 items-center">
             <div className="inline-flex gap-2 rounded-sm border border-border bg-background p-1">
               <Button type="button" variant="ghost" size="icon" title="Thumbs up" aria-label="Thumbs up">
                 <ThumbsUp className="h-4 w-4" />
@@ -117,6 +125,13 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
         </div>
       </div>
       {isExpanded && modifiers.length > 0 && <OpportunityModifiers modifiers={modifiers} />}
+      
+      <OpportunityDetailsOverlay 
+        opportunity={o} 
+        competencyLabel={competencyLabel} 
+        isOpen={isOverlayOpen} 
+        onOpenChange={setIsOverlayOpen} 
+      />
     </li>
   );
 }

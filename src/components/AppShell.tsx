@@ -27,19 +27,22 @@ export function AppShell({ children }: { children: ReactNode }) {
     <div className="min-h-screen flex flex-col bg-background">
       <header className="border-b border-border bg-primary text-primary-foreground print:hidden">
         <div className="max-w-[1400px] mx-auto px-8 h-16 flex items-center justify-between">
-          <Link to="/dashboard" className="flex items-baseline gap-3">
-            <span className="text-xl font-bold tracking-tight">SCHOTT</span>
-            <span className="label-micro text-primary-foreground/70">Smart Opportunity Finder</span>
+          <Link to="/dashboard" className="flex flex-col whitespace-nowrap justify-center">
+            <div className="flex items-baseline">
+              <span className="text-sm font-semibold tracking-wide text-primary-foreground/80">LONG</span>
+              <span className="text-2xl font-black tracking-tight">SCHOTT</span>
+            </div>
+            <span className="text-[9px] uppercase tracking-[0.15em] text-primary-foreground/60 -mt-0.5 font-medium">Smart Opportunity Finder</span>
           </Link>
-          <nav className="flex items-center gap-8">
+          <nav className="flex items-center gap-4 lg:gap-6 flex-wrap justify-end">
             {NAV.map((n) => {
               const active = pathname.startsWith(n.to);
               return (
                 <Link
                   key={n.to}
                   to={n.to}
-                  className={`text-xs uppercase tracking-wider font-medium transition-opacity ${
-                    active ? "opacity-100 border-b-2 border-[color:var(--color-accent)] pb-1" : "opacity-70 hover:opacity-100"
+                  className={`text-xs uppercase tracking-wider font-medium transition-all border-b-2 py-1 ${
+                    active ? "opacity-100 border-[color:var(--color-accent)]" : "opacity-70 border-transparent hover:opacity-100"
                   }`}
                 >
                   {n.label}

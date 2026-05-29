@@ -192,7 +192,7 @@ function StatsPage() {
         <PageHeader
           eyebrow="Product Metrics"
           title="Opportunity Product performance overview"
-          description="Revenue time-series and top-moving products. Items are mapped to SCHOTT competencies (see DOMAIN.md)."
+          description="Revenue time-series and top-moving products. Items are mapped to SCHOTT competencies."
         >
           <ExportButtons
             data={productStats}
@@ -218,7 +218,7 @@ function StatsPage() {
           <StatCard>
             <p className="label-micro">Estimated Near-Term Packaging Demand</p>
             <div className="mt-2 text-2xl font-semibold">${Math.round(estimatedDemand).toLocaleString()}</div>
-            <p className="text-xs text-muted-foreground mt-1">Weighted by clinical, patent and funding signals (mock estimator)</p>
+            <p className="text-xs text-muted-foreground mt-1">Weighted by clinical, patent and funding signals</p>
           </StatCard>
 
           <StatCard>
