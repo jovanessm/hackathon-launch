@@ -1,5 +1,6 @@
-import { BookmarkPlus } from "lucide-react";
+import { BookmarkPlus, ThumbsDown, ThumbsUp } from "lucide-react";
 import { computeFinalScore, sumModifiers } from "@/lib/scoring";
+import { Button } from "@/components/ui/button";
 import { OpportunityModifiers, type ModifierEntry } from "./OpportunityModifiers";
 
 export interface OpportunityEvidence {
@@ -75,16 +76,29 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
             ))}
           </div>
         </div>
-        <div className="col-span-3 border-l border-border pl-6">
-          <p className="label-micro">Final score</p>
-          <p className="text-3xl font-bold text-primary mt-1">{finalScore.toFixed(1)}</p>
-          <p className="text-xs text-muted-foreground mt-1">Baseline {Number(o.baseline_score).toFixed(1)}</p>
-          {modifiers.length > 0 && (
-            <button onClick={onToggleExpand}
-              className={`mt-3 inline-block text-xs px-2 py-1 ${totalMod >= 0 ? "bg-accent text-accent-foreground" : "bg-destructive text-destructive-foreground"}`}>
-              {totalMod >= 0 ? "+" : ""}{(totalMod * 100).toFixed(0)}% from docs
-            </button>
-          )}
+        <div className="flex flex-col justify-between col-span-3 border-l border-border pl-6">
+          <div>
+            <p className="label-micro">Final score</p>
+            <p className="text-3xl font-bold text-primary mt-1">{finalScore.toFixed(1)}</p>
+            <p className="text-xs text-muted-foreground mt-1">Baseline {Number(o.baseline_score).toFixed(1)}</p>
+            {modifiers.length > 0 && (
+              <button onClick={onToggleExpand}
+                className={`mt-3 inline-block text-xs px-2 py-1 ${totalMod >= 0 ? "bg-accent text-accent-foreground" : "bg-destructive text-destructive-foreground"}`}>
+                {totalMod >= 0 ? "+" : ""}{(totalMod * 100).toFixed(0)}% from docs
+              </button>
+            )}
+          </div>
+        
+          <div className="mt-8 flex justify-end">
+            <div className="inline-flex gap-2 rounded-sm border border-border bg-background p-1">
+              <Button type="button" variant="ghost" size="icon" title="Thumbs up" aria-label="Thumbs up">
+                <ThumbsUp className="h-4 w-4" />
+              </Button>
+              <Button type="button" variant="ghost" size="icon" title="Thumbs down" aria-label="Thumbs down">
+                <ThumbsDown className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
       {isExpanded && modifiers.length > 0 && <OpportunityModifiers modifiers={modifiers} />}
