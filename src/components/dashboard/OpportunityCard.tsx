@@ -1,6 +1,6 @@
-import { BookmarkPlus, BookmarkCheck, ThumbsDown, ThumbsUp } from "lucide-react";
-import { computeFinalScore, sumModifiers } from "@/lib/scoring";
 import { Button } from "@/components/ui/button";
+import { computeFinalScore, sumModifiers } from "@/lib/scoring";
+import { BookmarkCheck, BookmarkPlus, ThumbsDown, ThumbsUp } from "lucide-react";
 import { OpportunityModifiers, type ModifierEntry } from "./OpportunityModifiers";
 
 export interface OpportunityEvidence {
@@ -19,6 +19,7 @@ export interface Opportunity {
   phase: string | null;
   therapeutic_modality: string | null;
   competency_id: string | null;
+  risk_level?: "low" | "medium" | "high";
 }
 
 interface Props {
@@ -55,7 +56,7 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
           <div className="flex items-start justify-between">
             <h2 className="text-xl font-bold">{o.title}</h2>
             {(onAddToWatchlist || onRemoveFromWatchlist) && (
-              <button 
+              <button
                 onClick={isFavorited ? onRemoveFromWatchlist : onAddToWatchlist}
                 disabled={(isFavorited ? isRemovingFromWatchlist : isAddingToWatchlist)}
                 className={`transition-colors ${isFavorited ? 'text-primary hover:text-destructive' : 'text-muted-foreground hover:text-primary'} disabled:opacity-50`}
@@ -90,8 +91,19 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
                 {totalMod >= 0 ? "+" : ""}{(totalMod * 100).toFixed(0)}% from docs
               </button>
             )}
+            {o.risk_level && (
+              <div className="mt-4 pt-4 border-t border-border">
+                <p className="label-micro text-muted-foreground">Risk Level</p>
+                <div className={`mt-2 inline-block px-3 py-1 rounded text-sm font-semibold ${o.risk_level === "low" ? "bg-green-100 text-green-900" :
+                    o.risk_level === "medium" ? "bg-yellow-100 text-yellow-900" :
+                      "bg-red-100 text-red-900"
+                  }`}>
+                  {o.risk_level.charAt(0).toUpperCase() + o.risk_level.slice(1)}
+                </div>
+              </div>
+            )}
           </div>
-        
+
           <div className="mt-8 flex justify-end">
             <div className="inline-flex gap-2 rounded-sm border border-border bg-background p-1">
               <Button type="button" variant="ghost" size="icon" title="Thumbs up" aria-label="Thumbs up">
