@@ -125,7 +125,7 @@ function PotentialCustomersPage() {
         {mockCompanies.map((c) => (
           <section
             key={c.id}
-            className="overflow-hidden border border-border bg-card grid grid-cols-1 lg:grid-cols-[1.25fr_0.75fr]"
+            className="overflow-hidden border border-border bg-card grid grid-cols-1 lg:grid-cols-[1.5fr_1.25fr]"
           >
             <div className="p-4 lg:p-5">
               <h2 className="m-0 text-lg font-semibold text-foreground">{c.name}</h2>
@@ -152,7 +152,7 @@ function PotentialCustomersPage() {
               </p>
             </div>
 
-            <div className="border-t border-border bg-muted/30 p-4 lg:border-l lg:border-t-0 lg:p-5">
+            <div className="border-t border-border bg-muted p-4 lg:border-l lg:border-t-0 lg:p-5">
               <p className="m-0 text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
                 AI Summary
               </p>
