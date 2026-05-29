@@ -1,6 +1,6 @@
+import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 export const getOpportunities = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
@@ -12,7 +12,26 @@ export const getOpportunities = createServerFn({ method: "GET" })
       supabase.from("competencies").select("*"),
       supabase.from("evaluation_log").select("*, documents(filename)").eq("user_id", userId),
     ]);
-    return { opps: opps ?? [], evidence: evidence ?? [], comps: comps ?? [], logs: logs ?? [] };
+
+    // Assign random risk levels, ensuring at least one of each
+    const oppsList = opps ?? [];
+    if (oppsList.length > 0) {
+      const riskLevels: Array<"low" | "medium" | "high"> = ["low", "medium", "high"];
+      const assigned = new Set<string>();
+
+      // Assign one of each risk level first
+      for (let i = 0; i < Math.min(3, oppsList.length); i++) {
+        (oppsList[i] as any).risk_level = riskLevels[i];
+        assigned.add(oppsList[i].id);
+      }
+
+      // Assign random risk levels to remaining opportunities
+      for (let i = 3; i < oppsList.length; i++) {
+        (oppsList[i] as any).risk_level = riskLevels[Math.floor(Math.random() * riskLevels.length)];
+      }
+    }
+
+    return { opps: oppsList, evidence: evidence ?? [], comps: comps ?? [], logs: logs ?? [] };
   });
 
 export const listDataSources = createServerFn({ method: "GET" })
