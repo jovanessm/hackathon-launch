@@ -37,6 +37,8 @@ We built an automated data-driven market research platform that empowers SCHOTT'
 - **Save and track opportunities** with custom watchlists and document analysis
 - **Surface insights** like opportunity product performance, early signal detection, and competitor's moves
 
+![data pipeline](image.png)
+
 ### Core Features
 
 - **Dashboard**: Ranked opportunities with daily scoring and risk assessment as well as continuous supervised-learning to improve the scoring system 
