@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { getOpportunities, listDataSources, saveFilter } from "@/lib/opportunities.functions";
+import { getOpportunities, listDataSources, saveFilter, listSavedFilters, deleteSavedFilter } from "@/lib/opportunities.functions";
 import { useOpportunityFilters } from "@/hooks/useOpportunityFilters";
 import { FiltersSidebar } from "@/components/dashboard/FiltersSidebar";
 import { OpportunityList } from "@/components/dashboard/OpportunityList";
@@ -25,6 +25,8 @@ function Dashboard() {
   const fetchOpps = useServerFn(getOpportunities);
   const fetchSources = useServerFn(listDataSources);
   const fetchSave = useServerFn(saveFilter);
+  const fetchSaved = useServerFn(listSavedFilters);
+  const fetchDelSaved = useServerFn(deleteSavedFilter);
   const qc = useQueryClient();
   const searchParams = Route.useSearch();
 
@@ -40,7 +42,14 @@ function Dashboard() {
 
   const saveMut = useMutation({
     mutationFn: (name: string) => fetchSave({ data: { name, payload: filters.payload } }),
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["filters"] }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["savedFilters"] }),
+  });
+
+  const { data: savedFilters } = useQuery({ queryKey: ["savedFilters"], queryFn: () => fetchSaved() });
+  
+  const delSavedMut = useMutation({
+    mutationFn: (id: string) => fetchDelSaved({ data: { id } }),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["savedFilters"] }),
   });
 
   return (
@@ -56,6 +65,9 @@ function Dashboard() {
         onCompetencyChange={filters.setCompetency}
         onSaveFilter={(name) => saveMut.mutate(name)}
         isSaving={saveMut.isPending}
+        savedFilters={savedFilters ?? []}
+        onDeleteSavedFilter={(id) => delSavedMut.mutate(id)}
+        isDeletingFilter={delSavedMut.isPending}
       />
       <section className="col-span-12 lg:col-span-9">
         <PageHeader

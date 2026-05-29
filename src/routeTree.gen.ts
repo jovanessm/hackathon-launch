@@ -16,7 +16,6 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedWatchlistRouteImport } from './routes/_authenticated/watchlist'
 import { Route as AuthenticatedStatRouteImport } from './routes/_authenticated/stat'
 import { Route as AuthenticatedPotentialCustomersRouteImport } from './routes/_authenticated/potential-customers'
-import { Route as AuthenticatedFiltersRouteImport } from './routes/_authenticated/filters'
 import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedAlertsRouteImport } from './routes/_authenticated/alerts'
@@ -56,11 +55,6 @@ const AuthenticatedPotentialCustomersRoute =
     path: '/potential-customers',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
-const AuthenticatedFiltersRoute = AuthenticatedFiltersRouteImport.update({
-  id: '/filters',
-  path: '/filters',
-  getParentRoute: () => AuthenticatedRoute,
-} as any)
 const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
   id: '/documents',
   path: '/documents',
@@ -84,7 +78,6 @@ export interface FileRoutesByFullPath {
   '/alerts': typeof AuthenticatedAlertsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
-  '/filters': typeof AuthenticatedFiltersRoute
   '/potential-customers': typeof AuthenticatedPotentialCustomersRoute
   '/stat': typeof AuthenticatedStatRoute
   '/watchlist': typeof AuthenticatedWatchlistRoute
@@ -96,7 +89,6 @@ export interface FileRoutesByTo {
   '/alerts': typeof AuthenticatedAlertsRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/documents': typeof AuthenticatedDocumentsRoute
-  '/filters': typeof AuthenticatedFiltersRoute
   '/potential-customers': typeof AuthenticatedPotentialCustomersRoute
   '/stat': typeof AuthenticatedStatRoute
   '/watchlist': typeof AuthenticatedWatchlistRoute
@@ -110,7 +102,6 @@ export interface FileRoutesById {
   '/_authenticated/alerts': typeof AuthenticatedAlertsRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
-  '/_authenticated/filters': typeof AuthenticatedFiltersRoute
   '/_authenticated/potential-customers': typeof AuthenticatedPotentialCustomersRoute
   '/_authenticated/stat': typeof AuthenticatedStatRoute
   '/_authenticated/watchlist': typeof AuthenticatedWatchlistRoute
@@ -124,7 +115,6 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/documents'
-    | '/filters'
     | '/potential-customers'
     | '/stat'
     | '/watchlist'
@@ -136,7 +126,6 @@ export interface FileRouteTypes {
     | '/alerts'
     | '/dashboard'
     | '/documents'
-    | '/filters'
     | '/potential-customers'
     | '/stat'
     | '/watchlist'
@@ -149,7 +138,6 @@ export interface FileRouteTypes {
     | '/_authenticated/alerts'
     | '/_authenticated/dashboard'
     | '/_authenticated/documents'
-    | '/_authenticated/filters'
     | '/_authenticated/potential-customers'
     | '/_authenticated/stat'
     | '/_authenticated/watchlist'
@@ -213,13 +201,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPotentialCustomersRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
-    '/_authenticated/filters': {
-      id: '/_authenticated/filters'
-      path: '/filters'
-      fullPath: '/filters'
-      preLoaderRoute: typeof AuthenticatedFiltersRouteImport
-      parentRoute: typeof AuthenticatedRoute
-    }
     '/_authenticated/documents': {
       id: '/_authenticated/documents'
       path: '/documents'
@@ -248,7 +229,6 @@ interface AuthenticatedRouteChildren {
   AuthenticatedAlertsRoute: typeof AuthenticatedAlertsRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
-  AuthenticatedFiltersRoute: typeof AuthenticatedFiltersRoute
   AuthenticatedPotentialCustomersRoute: typeof AuthenticatedPotentialCustomersRoute
   AuthenticatedStatRoute: typeof AuthenticatedStatRoute
   AuthenticatedWatchlistRoute: typeof AuthenticatedWatchlistRoute
@@ -258,7 +238,6 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedAlertsRoute: AuthenticatedAlertsRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
-  AuthenticatedFiltersRoute: AuthenticatedFiltersRoute,
   AuthenticatedPotentialCustomersRoute: AuthenticatedPotentialCustomersRoute,
   AuthenticatedStatRoute: AuthenticatedStatRoute,
   AuthenticatedWatchlistRoute: AuthenticatedWatchlistRoute,

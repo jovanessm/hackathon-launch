@@ -1,7 +1,15 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { Trash2 } from "lucide-react";
 
 interface DataSource { id: string; key: string; label: string; category: string }
 interface Competency { id: string; label: string }
+
+export interface SavedFilter {
+  id: string;
+  name: string;
+  payload: any;
+}
 
 interface Props {
   search: string;
@@ -14,6 +22,9 @@ interface Props {
   onCompetencyChange: (v: string) => void;
   onSaveFilter: (name: string) => void;
   isSaving: boolean;
+  savedFilters: SavedFilter[];
+  onDeleteSavedFilter: (id: string) => void;
+  isDeletingFilter: boolean;
 }
 
 export function FiltersSidebar(p: Props) {
@@ -61,6 +72,68 @@ export function FiltersSidebar(p: Props) {
           Save
         </button>
       </div>
+      
+      {p.savedFilters.length > 0 && (
+        <div className="border-t border-border pt-6">
+          <p className="label-micro mb-3">Saved Filters</p>
+          <ul className="space-y-3">
+            {p.savedFilters.map((f) => {
+              const payload = f.payload || {};
+              const searchVal = payload.search;
+              const compVal = payload.competency;
+              const compLabel = p.competencies.find(c => c.id === compVal)?.label || compVal;
+              const disabledSources = Object.entries(payload.enabled || {})
+                .filter(([_, isEnabled]) => !isEnabled)
+                .map(([key]) => p.sources.find(s => s.key === key)?.label || key);
+
+              return (
+                <li key={f.id} className="flex flex-col gap-2 border border-border p-3 bg-card group">
+                  <div className="flex items-start justify-between gap-2">
+                    <Link 
+                      to="/dashboard" 
+                      search={f.payload as any}
+                      className="flex-1 text-sm font-bold hover:text-primary transition-colors text-left leading-tight"
+                      title="Apply this filter"
+                    >
+                      {f.name}
+                    </Link>
+                    <button
+                      type="button"
+                      onClick={() => p.onDeleteSavedFilter(f.id)}
+                      disabled={p.isDeletingFilter}
+                      className="text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0"
+                      title="Delete filter"
+                    >
+                      <Trash2 className="h-4 w-4" />
+                    </button>
+                  </div>
+                  
+                  <div className="flex flex-wrap gap-1.5 mt-1">
+                    {searchVal && (
+                      <span className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium bg-secondary text-secondary-foreground rounded">
+                        <span className="opacity-70 mr-1">Search:</span> {searchVal}
+                      </span>
+                    )}
+                    {compVal && compVal !== "all" && (
+                      <span className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium bg-accent/10 text-accent rounded">
+                        <span className="opacity-70 mr-1">Comp:</span> {compLabel}
+                      </span>
+                    )}
+                    {disabledSources.length > 0 && (
+                      <span className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium bg-destructive/10 text-destructive rounded">
+                        <span className="opacity-70 mr-1">Excl:</span> {disabledSources.join(", ")}
+                      </span>
+                    )}
+                    {!searchVal && (!compVal || compVal === "all") && disabledSources.length === 0 && (
+                      <span className="text-[10px] text-muted-foreground italic">No filters applied</span>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
     </aside>
   );
 }
