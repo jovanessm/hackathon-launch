@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { computeFinalScore } from "@/lib/scoring";
 
 export interface FilterableOpportunity {
@@ -17,6 +17,14 @@ export function useOpportunityFilters<
   const [search, setSearch] = useState(initialState?.search ?? "");
   const [enabled, setEnabled] = useState<Record<string, boolean>>(initialState?.enabled ?? {});
   const [competency, setCompetency] = useState<string>(initialState?.competency ?? "all");
+
+  useEffect(() => {
+    if (initialState) {
+      setSearch(initialState.search ?? "");
+      setEnabled(initialState.enabled ?? {});
+      setCompetency(initialState.competency ?? "all");
+    }
+  }, [initialState?.search, initialState?.competency, JSON.stringify(initialState?.enabled)]);
 
   const toggleSource = (key: string) => setEnabled((p) => ({ ...p, [key]: !(p[key] ?? true) }));
   const isOn = (key: string) => enabled[key] ?? true;

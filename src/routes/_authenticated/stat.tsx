@@ -191,7 +191,7 @@ function StatsPage() {
       <section className="col-span-12">
         <PageHeader
           eyebrow="Product Metrics"
-          title="Opportunity Product performance overview"
+          title="Opportunity Product Performance Overview"
           description="Revenue time-series and top-moving products. Items are mapped to SCHOTT competencies."
         >
           <ExportButtons

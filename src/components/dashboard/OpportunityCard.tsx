@@ -75,6 +75,7 @@ function calculateTimingWindow(phase: string | null, riskLevel?: "low" | "medium
 
 export function OpportunityCard({ index, opportunity: o, competencyLabel, evidence, modifiers, isExpanded, onToggleExpand, onAddToWatchlist, isAddingToWatchlist, onRemoveFromWatchlist, isRemovingFromWatchlist, isFavorited }: Props) {
   const [isOverlayOpen, setIsOverlayOpen] = useState(false);
+  const [feedback, setFeedback] = useState<'up' | 'down' | null>(null);
   const totalMod = sumModifiers(modifiers);
   const finalScore = computeFinalScore(o.baseline_score, modifiers);
 
@@ -154,15 +155,27 @@ export function OpportunityCard({ index, opportunity: o, competencyLabel, eviden
         </div>
       </div>
       
-      <div className="absolute bottom-6 left-6 opacity-0 group-hover:opacity-100 transition-opacity z-10">
-        <div className="inline-flex gap-2 rounded-sm border border-border bg-background p-1 shadow-sm">
-          <Button type="button" variant="ghost" size="icon" title="Thumbs up" aria-label="Thumbs up">
-            <ThumbsUp className="h-4 w-4" />
-          </Button>
-          <Button type="button" variant="ghost" size="icon" title="Thumbs down" aria-label="Thumbs down">
-            <ThumbsDown className="h-4 w-4" />
-          </Button>
-        </div>
+      <div className={`absolute bottom-6 left-6 transition-opacity z-10 ${!feedback ? 'opacity-0 group-hover:opacity-100' : 'opacity-100'}`}>
+        {!feedback ? (
+          <div className="inline-flex gap-1 rounded-sm border border-border bg-background p-1 shadow-sm">
+            <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title="Relevant" aria-label="Thumbs up" onClick={() => setFeedback('up')}>
+              <ThumbsUp className="h-3.5 w-3.5" />
+            </Button>
+            <Button type="button" variant="ghost" size="icon" className="h-7 w-7" title="Not relevant" aria-label="Thumbs down" onClick={() => setFeedback('down')}>
+              <ThumbsDown className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+        ) : (
+          <button 
+            type="button"
+            onClick={() => setFeedback(null)}
+            className="inline-flex items-center gap-2 rounded-sm border border-primary bg-primary/10 hover:bg-destructive/10 hover:border-destructive hover:text-destructive px-3 py-1.5 shadow-sm text-primary animate-in fade-in zoom-in duration-300 transition-colors"
+            title="Click to undo feedback"
+          >
+            {feedback === 'up' ? <ThumbsUp className="h-3.5 w-3.5 fill-current" /> : <ThumbsDown className="h-3.5 w-3.5 fill-current" />}
+            <span className="text-xs font-bold tracking-wide">Feedback recorded. Weight adjusted!</span>
+          </button>
+        )}
       </div>
       {isExpanded && modifiers.length > 0 && <OpportunityModifiers modifiers={modifiers} />}
       
